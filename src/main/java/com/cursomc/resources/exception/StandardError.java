@@ -1,19 +1,18 @@
 package com.cursomc.resources.exception;
 
+import org.springframework.http.HttpStatus;
+
 public class StandardError {
 
 	private Integer status;
 	private String msg;
-	private String msgConsole;
 	private Long timeStamp;
-	private boolean show = false;
 
-	public StandardError(Integer status, String msg, Long timeStamp, boolean show) {
+	public StandardError(HttpStatus status, String msg, Long timeStamp, boolean show) {
 		super();
-		this.status = status;
+		this.status = status.value();
 		this.msg = msg;
 		this.timeStamp = timeStamp;
-		this.show = show;
 	}
 
 	public Integer getStatus() {
@@ -40,21 +39,4 @@ public class StandardError {
 		this.timeStamp = timeStamp;
 	}
 
-	public boolean isShow() {
-		return show;
-	}
-
-	public void setShow(boolean show) {
-		this.show = show;
-	}
-
-	public String getMsgConsole() {
-		return msgConsole;
-	}
-
-	public void setMsgConsole(String msgConsole) {
-		this.msgConsole = msgConsole;
-	} 
-
-	
 }

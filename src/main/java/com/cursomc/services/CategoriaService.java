@@ -1,10 +1,12 @@
 package com.cursomc.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.cursomc.domain.Categoria;
 import com.cursomc.repositories.CategoriaRepository;
+import com.cursomc.services.exception.DataIntegrityException;
 import com.cursomc.services.exception.ObjectNotFoundException;
 
 @Service
@@ -19,5 +21,23 @@ public class CategoriaService {
 			throw new ObjectNotFoundException(id, Categoria.class, "Categoria não encontrada");
 		}
 		return categoria;
+	}
+	
+	public Categoria insert(Categoria categoria) {
+		categoria.setId(null);
+		return categoriaRepository.save(categoria);
+	}
+
+	public Categoria update(Categoria categoria) {
+		return categoriaRepository.save(categoria);
+	}
+
+	public void delete(Integer id) {
+		findOne(id);
+		try {
+			categoriaRepository.delete(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excuir uma categoria que possui produtos.", e);
+		}
 	}
 }
