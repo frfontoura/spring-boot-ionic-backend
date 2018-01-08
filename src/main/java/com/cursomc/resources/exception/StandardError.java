@@ -8,7 +8,7 @@ public class StandardError {
 	private String msg;
 	private Long timeStamp;
 
-	public StandardError(HttpStatus status, String msg, Long timeStamp, boolean show) {
+	public StandardError(HttpStatus status, String msg, Long timeStamp) {
 		super();
 		this.status = status.value();
 		this.msg = msg;
