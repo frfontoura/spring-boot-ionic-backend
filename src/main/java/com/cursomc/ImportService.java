@@ -66,11 +66,18 @@ public class ImportService {
 	public void init() throws ParseException {
 		Categoria cat1 = new Categoria();
 		cat1.setNome("Informática");
-		categoriaRepository.save(cat1);
 
 		Categoria cat2 = new Categoria();
 		cat2.setNome("Escritório");
-		categoriaRepository.save(cat2);
+		
+		Categoria cat3 = new Categoria();
+		cat3.setNome("Cat 3");
+		
+		Categoria cat4 = new Categoria();
+		cat4.setNome("Cat 4");
+		
+		Categoria cat5 = new Categoria();
+		cat5.setNome("Cat 5");
 
 		Produto p1 = new Produto(null, "Computador", 2000.00);
 		Produto p2 = new Produto(null, "Impressora", 800.00);
@@ -83,7 +90,7 @@ public class ImportService {
 		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
 		p3.getCategorias().addAll(Arrays.asList(cat1));
 
-		categoriaRepository.save(Arrays.asList(cat1, cat2));
+		categoriaRepository.save(Arrays.asList(cat1, cat2, cat3, cat4, cat5));
 		produtoRepository.save(Arrays.asList(p1, p2, p3));
 
 		// ###############################################################################
