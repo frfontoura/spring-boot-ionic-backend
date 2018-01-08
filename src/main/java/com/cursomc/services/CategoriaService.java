@@ -35,6 +35,7 @@ public class CategoriaService {
 	}
 
 	public Categoria update(Categoria categoria) {
+		findOne(categoria.getId());
 		return categoriaRepository.save(categoria);
 	}
 
@@ -43,7 +44,7 @@ public class CategoriaService {
 		try {
 			categoriaRepository.delete(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possível excuir uma categoria que possui produtos.", e);
+			throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos.", e);
 		}
 	}
 
