@@ -21,6 +21,10 @@ public class Cidade {
 
 	public Cidade() {
 	}
+	
+	public Cidade(Integer id) {
+		this.id = id;
+	}
 
 	public Cidade(Integer id, String nome, Estado estado) {
 		super();
