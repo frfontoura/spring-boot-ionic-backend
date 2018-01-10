@@ -2,9 +2,12 @@ package com.cursomc.resources.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class UrlUtils {
 
@@ -17,6 +20,9 @@ public class UrlUtils {
 	}
 
 	public static List<Integer> decodeIntList(String s) {
+		if(StringUtils.isBlank(s)) {
+			return new ArrayList<>();
+		}
 		return Arrays.asList(s.split(",")).stream().map(x -> Integer.parseInt(x)).collect(Collectors.toList());
 	}
 }
