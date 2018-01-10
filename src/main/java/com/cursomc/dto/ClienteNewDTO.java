@@ -4,6 +4,9 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.cursomc.services.validation.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNewDTO {
 
 	@NotEmpty(message = "Preenchimento obrigatório")
