@@ -21,7 +21,7 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
-	public Categoria findOne(Integer id) {
+	public Categoria find(Integer id) {
 		Categoria categoria = categoriaRepository.findOne(id);
 		if(categoria == null) {
 			throw new ObjectNotFoundException(id, Categoria.class, "Categoria não encontrada");
@@ -35,13 +35,13 @@ public class CategoriaService {
 	}
 
 	public Categoria update(Categoria categoria) {
-		Categoria categoriaDB = findOne(categoria.getId());
+		Categoria categoriaDB = find(categoria.getId());
 		updateData(categoriaDB, categoria);
 		return categoriaRepository.save(categoriaDB);
 	}
 
 	public void delete(Integer id) {
-		findOne(id);
+		find(id);
 		try {
 			categoriaRepository.delete(id);
 		} catch (DataIntegrityViolationException e) {
