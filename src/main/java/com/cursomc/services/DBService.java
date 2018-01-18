@@ -133,7 +133,7 @@ public class DBService {
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c2);
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 
-		Cliente cli2 = new Cliente(null, "Ana Costa", "nelio.iftm@gmail.com", "31628382740", TipoCliente.PESSOA_FISICA, bCrypt.encode("123"));
+		Cliente cli2 = new Cliente(null, "Ana Costa", "admin@admin.com", "31628382740", TipoCliente.PESSOA_FISICA, bCrypt.encode("123"));
 		cli2.getTelefones().addAll(Arrays.asList("93883321", "34252625"));
 		cli2.addPerfil(Perfil.ADMIN);
 		Endereco e3 = new Endereco(null, "Avenida Floriano", "2106", null, "Centro", "281777012", cli2, c2);
