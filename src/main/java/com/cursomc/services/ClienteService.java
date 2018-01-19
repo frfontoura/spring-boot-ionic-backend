@@ -1,5 +1,6 @@
 package com.cursomc.services;
 
+import java.net.URI;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cursomc.domain.Cidade;
 import com.cursomc.domain.Cliente;
@@ -29,16 +31,19 @@ public class ClienteService {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
+
+	@Autowired
+	private S3Service s3Service;
+
 	@Autowired
 	private BCryptPasswordEncoder bCrypt;
 
 	public Cliente findOne(Integer id) {
 		UserSS user = UserService.authenticated();
-		if (user==null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
 		}
-		
+
 		Cliente cliente = clienteRepository.findOne(id);
 		if (cliente == null) {
 			throw new ObjectNotFoundException(id, Cliente.class, "Cliente não encontrado");
@@ -75,13 +80,20 @@ public class ClienteService {
 		return clienteRepository.findAll(pageRequest);
 	}
 
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
+	}
+
 	public Cliente fromDTO(ClienteDTO objDto) {
 		return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null, null);
 	}
 
 	public Cliente fromDTO(ClienteNewDTO clienteDTO) {
-		Cliente cliente = new Cliente(null, clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpfOuCnpj(),	TipoCliente.valueOf(clienteDTO.getTipo()), bCrypt.encode(clienteDTO.getSenha()));
-		Endereco endereco = new Endereco(null, clienteDTO.getLogradouro(), clienteDTO.getNumero(),	clienteDTO.getComplemento(), clienteDTO.getBairro(), clienteDTO.getCep(), cliente, new Cidade(clienteDTO.getCidadeId()));
+		Cliente cliente = new Cliente(null, clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpfOuCnpj(),
+				TipoCliente.valueOf(clienteDTO.getTipo()), bCrypt.encode(clienteDTO.getSenha()));
+		Endereco endereco = new Endereco(null, clienteDTO.getLogradouro(), clienteDTO.getNumero(),
+				clienteDTO.getComplemento(), clienteDTO.getBairro(), clienteDTO.getCep(), cliente,
+				new Cidade(clienteDTO.getCidadeId()));
 		cliente.getEnderecos().add(endereco);
 		cliente.getTelefones().add(clienteDTO.getTelefone1());
 		if (StringUtils.isNotBlank(clienteDTO.getTelefone2())) {
