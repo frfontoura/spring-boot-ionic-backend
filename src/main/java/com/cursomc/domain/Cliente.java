@@ -62,6 +62,10 @@ public class Cliente implements Serializable {
 		addPerfil(Perfil.CLIENTE);
 	}
 
+	public Cliente(Integer id) {
+		this.id = id;
+	}
+	
 	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha) {
 		super();
 		this.id = id;
