@@ -43,8 +43,11 @@ public class ClienteService {
 	@Autowired
 	private BCryptPasswordEncoder bCrypt;
 
-	@Value("${img.prefix.client.profile}")
+	@Value("${img.client.profile.prefix}")
 	private String prefix;
+	
+	@Value("${img.client.profile.size}")
+	private Integer size;
 
 	public Cliente findOne(Integer id) {
 		UserSS user = UserService.authenticated();
@@ -94,6 +97,8 @@ public class ClienteService {
 			throw new AuthorizationException("Acesso negado");
 		}
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
 		String fileName = prefix + user.getId() + ".jpg";
 		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 	}
@@ -103,11 +108,8 @@ public class ClienteService {
 	}
 
 	public Cliente fromDTO(ClienteNewDTO clienteDTO) {
-		Cliente cliente = new Cliente(null, clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpfOuCnpj(),
-				TipoCliente.valueOf(clienteDTO.getTipo()), bCrypt.encode(clienteDTO.getSenha()));
-		Endereco endereco = new Endereco(null, clienteDTO.getLogradouro(), clienteDTO.getNumero(),
-				clienteDTO.getComplemento(), clienteDTO.getBairro(), clienteDTO.getCep(), cliente,
-				new Cidade(clienteDTO.getCidadeId()));
+		Cliente cliente = new Cliente(null, clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpfOuCnpj(),	TipoCliente.valueOf(clienteDTO.getTipo()), bCrypt.encode(clienteDTO.getSenha()));
+		Endereco endereco = new Endereco(null, clienteDTO.getLogradouro(), clienteDTO.getNumero(), clienteDTO.getComplemento(), clienteDTO.getBairro(), clienteDTO.getCep(), cliente,	new Cidade(clienteDTO.getCidadeId()));
 		cliente.getEnderecos().add(endereco);
 		cliente.getTelefones().add(clienteDTO.getTelefone1());
 		if (StringUtils.isNotBlank(clienteDTO.getTelefone2())) {
