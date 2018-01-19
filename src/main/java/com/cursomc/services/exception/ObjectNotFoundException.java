@@ -13,6 +13,10 @@ public class ObjectNotFoundException extends RuntimeException {
 		this.clazz = clazz;
 	}
 
+	public ObjectNotFoundException(String msg) {
+		super(msg);
+	}
+
 	public Integer getId() {
 		return id;
 	}
