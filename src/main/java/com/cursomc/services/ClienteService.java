@@ -45,7 +45,7 @@ public class ClienteService {
 
 	@Value("${img.client.profile.prefix}")
 	private String prefix;
-	
+
 	@Value("${img.client.profile.size}")
 	private Integer size;
 
@@ -91,6 +91,18 @@ public class ClienteService {
 		return clienteRepository.findAll(pageRequest);
 	}
 
+	public Cliente findByEmail(String email) {
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		Cliente obj = clienteRepository.findOne(user.getId());
+		if (obj == null) {
+			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + user.getId() + ", Tipo: " + Cliente.class.getName());
+		}
+		return obj;
+	}
+
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
 		UserSS user = UserService.authenticated();
 		if (user == null) {
@@ -108,8 +120,11 @@ public class ClienteService {
 	}
 
 	public Cliente fromDTO(ClienteNewDTO clienteDTO) {
-		Cliente cliente = new Cliente(null, clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpfOuCnpj(),	TipoCliente.valueOf(clienteDTO.getTipo()), bCrypt.encode(clienteDTO.getSenha()));
-		Endereco endereco = new Endereco(null, clienteDTO.getLogradouro(), clienteDTO.getNumero(), clienteDTO.getComplemento(), clienteDTO.getBairro(), clienteDTO.getCep(), cliente,	new Cidade(clienteDTO.getCidadeId()));
+		Cliente cliente = new Cliente(null, clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpfOuCnpj(),
+				TipoCliente.valueOf(clienteDTO.getTipo()), bCrypt.encode(clienteDTO.getSenha()));
+		Endereco endereco = new Endereco(null, clienteDTO.getLogradouro(), clienteDTO.getNumero(),
+				clienteDTO.getComplemento(), clienteDTO.getBairro(), clienteDTO.getCep(), cliente,
+				new Cidade(clienteDTO.getCidadeId()));
 		cliente.getEnderecos().add(endereco);
 		cliente.getTelefones().add(clienteDTO.getTelefone1());
 		if (StringUtils.isNotBlank(clienteDTO.getTelefone2())) {

@@ -35,6 +35,12 @@ public class ClienteResource {
 	public ResponseEntity<Cliente> findOne(@PathVariable Integer id) {
 		return ResponseEntity.ok(clienteService.findOne(id));
 	}
+	
+	@RequestMapping(value="/email", method=RequestMethod.GET)
+	public ResponseEntity<ClienteDTO> find(@RequestParam(value="value") String email) {
+		Cliente obj = clienteService.findByEmail(email);
+		return ResponseEntity.ok().body(new ClienteDTO(obj));
+	}
 
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
