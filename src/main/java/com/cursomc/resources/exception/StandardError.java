@@ -4,15 +4,27 @@ import org.springframework.http.HttpStatus;
 
 public class StandardError {
 
+	private Long timestamp;
 	private Integer status;
-	private String msg;
-	private Long timeStamp;
-
-	public StandardError(HttpStatus status, String msg, Long timeStamp) {
+	private String error;
+	private String message;
+	private String path;
+	
+	public StandardError(Long timestamp, HttpStatus status, String error, String message, String path) {
 		super();
+		this.timestamp = timestamp;
 		this.status = status.value();
-		this.msg = msg;
-		this.timeStamp = timeStamp;
+		this.error = error;
+		this.message = message;
+		this.path = path;
+	}
+
+	public Long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public Integer getStatus() {
@@ -23,20 +35,28 @@ public class StandardError {
 		this.status = status;
 	}
 
-	public String getMsg() {
-		return msg;
+	public String getError() {
+		return error;
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public void setError(String error) {
+		this.error = error;
 	}
 
-	public Long getTimeStamp() {
-		return timeStamp;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setTimeStamp(Long timeStamp) {
-		this.timeStamp = timeStamp;
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 }
